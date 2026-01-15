@@ -29,7 +29,7 @@ const App = () => {
   const handleRandomNumber = () => {
     const randomNumber = getRandomInt(0, anecdotes.length)
     setSelected(randomNumber)
-    console.log(randomNumber)
+    console.log(randomNumber )
   }
 
   return (
