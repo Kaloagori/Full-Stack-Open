@@ -47,5 +47,4 @@ const Course = ({courses}) => {
   )
 }
 
-
 export default Course
