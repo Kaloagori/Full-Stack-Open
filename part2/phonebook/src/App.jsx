@@ -2,20 +2,19 @@ import { useEffect, useState } from "react";
 import Filter from "./components/filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from "axios";
+import personService from "./services/persons"
 
 const App = () => {
-   const [persons, setPersons] = useState([])
-
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response =>{
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -26,11 +25,27 @@ const App = () => {
       number: newNumber
     }
 
-    const verifyPerson = persons.find((person) => person.name === newName) 
-      ? window.alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    persons.find((person) => person.name === newName) 
+      ? window.alert(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      : personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+  }
+
+  const deletePersona = id => {
+    const person = persons.find(p => p.id === id)
+
+    if(window.confirm(`Delete ${person.name} ?`)){
+      personService
+      .dlt(id)
+      .then(() =>{
+        setPersons(persons.filter(p => p.id !== id))
+      })
+    }
   }
 
   const handlePersonChange = (event) => {
@@ -57,7 +72,7 @@ const App = () => {
       <PersonForm onSubmit={addPersona} valueName={newName} valueNumber={newNumber} 
         onChangeName={handlePersonChange} onChangeNumber={handleNumberChange} />
       <h3>Numbers</h3>
-      <Persons person={filterPerson}/>
+      <Persons person={filterPerson} label={"delete"} handle={deletePersona} />
     </div>
   )
 }
