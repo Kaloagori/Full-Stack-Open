@@ -24,9 +24,31 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+    
+    
+    if(persons.find((person) => person.name === newName)){
+      if(window.confirm(`${newName} is already to phonebook, replace the old number with a new one?`)){
 
+        const personNumber = persons.findIndex(p => p.name === newName)
+        const personID = persons[personNumber]
+
+        personService
+          .update(personID, personObject)
+          .then(returnedPerson => {
+            setPersons()
+          })
+      }
+    }
+    
+
+    const personID = persons.findIndex(p => p.name === newName)
+    const id = persons[personID]
+
+    console.log(id.id)
+
+    /*
     persons.find((person) => person.name === newName) 
-      ? window.alert(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      ? window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
       : personService
         .create(personObject)
         .then(returnedPerson => {
@@ -34,6 +56,7 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+    */
   }
 
   const deletePersona = id => {
