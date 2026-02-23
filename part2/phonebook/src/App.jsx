@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react";
-import Filter from "./components/filter";
+import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/persons"
+
+const Notification = ({message , type}) => {
+    if(message === null) {
+      return null
+    }
+
+    return(
+      <div className={type === 'error' ? 'error' : 'sucess'}>
+        {message}
+      </div>
+    )
+  }
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -19,18 +31,6 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
-
-  const Notification = ({message , type}) => {
-    if(message === null) {
-      return null
-    }
-
-    return(
-      <div className={type === 'error' ? 'error' : 'sucess'}>
-        {message}
-      </div>
-    )
-  }
 
   const addPersona = (event) => {
     event.preventDefault()
