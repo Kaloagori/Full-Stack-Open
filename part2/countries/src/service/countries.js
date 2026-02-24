@@ -8,10 +8,4 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
-const getName = name => {
-    const request = axios.get(`${baseUrl}/name/${name}`)
-
-    return request.then(response => response.data)
-}
-
-export default { getAll, getName }
+export default { getAll }

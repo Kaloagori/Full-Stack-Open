@@ -1,22 +1,40 @@
 import { useEffect, useState } from "react"
 import countriesService from "./service/countries"
 
-const ShowCountries = ({array}) => {
+const ShowCountries = ({array , buttonHandle}) => {
+  
   if (array.length <= 4){
     
     if (array.length == 1){
 
-      const nameCountry = array.map(country => country.name.common)
+      const country = array[0]
 
       return(
-        <h1>{nameCountry}</h1>
+        <div>
+          <h1>{country.name.common}</h1>
+          <div>Capital {country.capital}</div>
+          <div>Area {country.area}</div>
+          <h2>Languages</h2>
+          <ul>
+            {Object.values(country.languages).map(language => (
+              <li key={language}>{language}</li>
+            ))}
+          </ul>
+          <img src={country.flags.png} />
+          <h2>Weather in {country.capital}</h2>
+          <div>Temperature</div>
+          <div>Wind</div>
+        </div>
       )
     }
 
     return(
       <div>
         {array.map(country =>
-          <div key={country.cca2}>{country.name.common}</div>
+          <div key={country.cca2}>
+            {country.name.common}
+            <button onClick={() => buttonHandle(country.name.common)}>Show</button>
+          </div>
         )}
       </div>
     )
@@ -42,6 +60,7 @@ const App = () => {
       })
   }, [])
 
+
   const handleNameChange = event => {
     setName(event.target.value)
   }  
@@ -54,7 +73,7 @@ const App = () => {
     <div>
       <div>find countries <input value={name} onChange={handleNameChange}/></div>
       <div>
-        <ShowCountries array={filterNames}/>
+        <ShowCountries array={filterNames} buttonHandle={setName} />
       </div>
     </div>
   )
