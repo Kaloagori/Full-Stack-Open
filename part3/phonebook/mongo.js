@@ -5,6 +5,8 @@ if (process.argv.length < 3) {
     process.exit(1)
 }
 
+const password = process.argv[2]
+
 const url = `mongodb+srv://fullstack:${password}@cluster0.qnvfk14.mongodb.net/phoneBook?appName=Cluster0`
 
 mongoose.set('strictQuery', false)
@@ -17,15 +19,28 @@ const phoneSchema = new mongoose.Schema({
 
 const Phone = mongoose.model('Phone', phoneSchema)
 
-const name = process.argv[3]
-const phoneNumber = process.argv[4]
+if (process.argv.length === 5){
 
-const phone = new Phone ({
-    name: name,
-    phone: phoneNumber,
-})
+    const name = process.argv[3]
+    const phoneNumber = process.argv[4]
 
-phone.save().then(result => {
-    console.log(`added ${name} number ${phoneNumber} to phonebook`)
-    mongoose.connection.close()
-})
+    const phone = new Phone ({
+        name: name,
+        number: phoneNumber,
+    })
+
+    phone.save().then(result => {
+        console.log(`added ${name} number ${phoneNumber} to phonebook`)
+        mongoose.connection.close()
+    })
+}
+
+if (process.argv.length === 3) {
+    Phone.find({}).then(result => {
+        console.log("phonebook:")
+        result.forEach(phone => {
+            console.log(`${phone.name} ${phone.number}`)
+        })
+        mongoose.connection.close()
+    })
+}
