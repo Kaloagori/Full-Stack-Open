@@ -98,8 +98,13 @@ app.post('/api/persons', (request, response) => {
         if(phone !== null){
             console.log("usuaio actualizado")
 
+            const phoneUpdate = Phone ({
+                name: body.name,
+                number: body.number,
+            })
+            
             console.log("actualizando")
-            Phone.findByIdAndUpdate(phone.id, phone, { new: true })
+            Phone.findByIdAndUpdate(phone.id, phoneUpdate, { new: true })
                 .then(updatedPhone => {
                     response.json(updatedPhone)
                 })
