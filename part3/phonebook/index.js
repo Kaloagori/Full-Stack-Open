@@ -88,6 +88,10 @@ app.post('/api/persons', (request, response) => {
     if(!body.number || !body.name) {
         return response.status(404).json({ error: 'name or number missing' })
     }
+
+    if(body.name.length < 3) {
+        return response.status(404).json({ error: 'name must be at least 3 characters long' })
+    }
     
     const phone = new Phone ({
         name: body.name,
@@ -125,32 +129,6 @@ const errorHandler = (error, request, response, next) => {
 }
 
 app.use(errorHandler)
-    /** 
-    if(!body.number || !body.name) {
-        return response.status(400).json({
-            error: 'name or number missing'
-        })
-    }
-
-    const names = persons.map(person => person.name)
-
-    if(names.includes(body.name)){
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const person = {
-        id: generateID(),
-        name: body.name,
-        number: body.number,
-    }
-
-    persons = persons.concat(person)
-
-    response.json(person)
-    */
-
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () =>  {

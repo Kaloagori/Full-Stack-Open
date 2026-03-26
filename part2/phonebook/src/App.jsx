@@ -10,7 +10,7 @@ const Notification = ({message , type}) => {
     }
 
     return(
-      <div className={type === 'error' ? 'error' : 'sucess'}>
+      <div className={type === 'error' ? 'error' : 'success'}>
         {message}
       </div>
     )
@@ -22,7 +22,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState('sucess')
+  const [messageType, setMessageType] = useState('success')
 
   useEffect(() => {
     personService

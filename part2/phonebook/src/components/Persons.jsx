@@ -1,10 +1,10 @@
-const Data = ({data, handle, label}) => {       
-    return(
-        <div>
-            {data.name} {data.number} 
-            <button onClick={handle}>{label}</button>
-        </div>
-    )
+const Data = ({ data, handle, label }) => {
+  return (
+    <div>
+      {data.name} {data.number} {' '}
+      <button onClick={handle}>{label}</button>
+    </div>
+  )
 }
 
 const Persons = ({person, handle, label}) => {
