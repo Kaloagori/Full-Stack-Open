@@ -37,11 +37,13 @@ let persons = [
     }
 ]
 
-app.get('/info', (request, response) =>{
-    const people = persons.length
-    const date = new Date()
+app.get('/info', (request, response) =>{    
+    Phone.find({}).then(phone => {
+        const people = phone.length
+        const date = new Date()
 
-    response.send(`<p>Phonebook has info for ${people} people</p> <p>${date}</p>`)
+        response.send(`<p>Phonebook has info for ${people} people</p> <p>${date}</p>`)
+    })
 })
 
 app.get('/api/persons', (request, response) => {
@@ -50,17 +52,16 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     Phone.findById(request.params.id)
         .then(phone => {
             if(phone){
-                response.status(phone)
+                response.json(phone)
             } else {
                 response.status(404).end()
             }
     })
-
-    .catch(error => next(error))
+        .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -93,30 +94,24 @@ app.post('/api/persons', (request, response) => {
         number: body.number
     })
 
-
-    Phone.findOne({name: phone.name}).then(phone => {
-        if(phone !== null){
-            console.log("usuaio actualizado")
-
-            const phoneUpdate = Phone ({
-                name: body.name,
-                number: body.number,
-            })
-            
-            console.log("actualizando")
-            Phone.findByIdAndUpdate(phone.id, phoneUpdate, { new: true })
-                .then(updatedPhone => {
-                    response.json(updatedPhone)
-                })
-                .catch(error => next(error))
-        } else {
-            console.log("creando usuario")
-        }
-    })
-
     phone.save().then(savedPhone => {
         response.json(savedPhone)
     })
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+
+    const phone = {
+        name: body.name,
+        number: body.number,
+    }
+
+    Phone.findByIdAndUpdate(request.params.id, phone, { new: true })
+        .then(updatedPhone => {
+            response.json(updatedPhone)
+        })
+        .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
