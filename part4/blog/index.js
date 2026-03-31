@@ -1,7 +1,7 @@
 import express from 'express'
 const app = express()
 import cors from 'cors'
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const blogSchema = new mongoose.Schema({
     title: String,
@@ -10,10 +10,10 @@ const blogSchema = new mongoose.Schema({
     likes: Number
 })
 
-const Blog = model('Blog', blogSchema)
+const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl = 'mongodb+srv://fullstack:root@cluster0.qnvfk14.mongodb.net/blogList?appName=Cluster0'
-connect(mongoUrl)
+mongoose.connect(mongoUrl)
 
 app.use(cors())
 app.use(express.json())
@@ -26,7 +26,7 @@ app.get('/api/blogs', (request, response) => {
         })
 })
 
-app.post('api/blogs', (request, response) => {
+app.post('/api/blogs', (request, response) => {
     const blog = new Blog(request.body)
 
     blog
